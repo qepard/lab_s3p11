@@ -2,6 +2,7 @@
 #include <fstream>
 #include <limits>
 #include <string>
+#include <iomanip>
 
 // структура данных
 struct Provision {
@@ -146,19 +147,39 @@ void loadData(Provision*& provisions, int& count, const std::string& filename) {
     std::cout << "Данные успешно загружены." << std::endl;
 }
 
-// просмотр товаров
+// просмотр товаров в виде таблицы
 void showData(const Provision* provisions, int count) {
     if (count == 0) {
         std::cout << "Нет данных для отображения." << std::endl;
         return;
     }
+
+    // выводим заголовок таблицы
     std::cout << "\n--- Список товаров на складе ---\n";
+    std::cout << "------------------------------------------------------------------------------------------------------\n";
+    std::cout << std::left << std::setw(5) << "ID"
+              << std::setw(25) << "Название"
+              << std::setw(20) << "Категория"
+              << std::setw(10) << "Кол-во"
+              << std::setw(10) << "Ед. изм."
+              << std::setw(15) << "Цена (руб.)"
+              << "Срок годн. (дн)" << std::endl;
+    std::cout << "------------------------------------------------------------------------------------------------------\n";
+
+    // выводим данные
     for (int i = 0; i < count; ++i) {
         const Provision& p = provisions[i];
-        std::cout << "ID: " << p.id << ", " << p.name << " (" << p.category << "), "
-                  << p.quantity << " " << p.unit << ", Цена: " << p.price 
-                  << ", Срок годности: " << p.expiryDays << " дн." << std::endl;
+        
+        std::cout << std::left << std::setw(5) << p.id
+                  << std::setw(25) << p.name
+                  << std::setw(20) << p.category
+                  // Для чисел используем выравнивание по правому краю, чтобы точки были друг под другом
+                  << std::right << std::fixed << std::setprecision(2) << std::setw(9) << p.quantity << " "
+                  << std::left << std::setw(10) << p.unit
+                  << std::right << std::fixed << std::setprecision(2) << std::setw(14) << p.price << " "
+                  << std::right << std::setw(10) << p.expiryDays << std::endl;
     }
+    std::cout << "------------------------------------------------------------------------------------------------------\n";
 }
 
 // редактирование товара
