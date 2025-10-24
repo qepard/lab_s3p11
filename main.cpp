@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fstream>
-#include <vector>
 #include <limits>
 #include <string>
 
@@ -16,13 +15,44 @@ struct Provision {
 };
 
 // прототипы функций
-void loadData(std::vector<Provision>& provisions, const std::string& filename);
-void showData(const std::vector<Provision>& provisions);
-void editData(std::vector<Provision>& provisions);
-void performCalculations(const std::vector<Provision>& provisions);
-void saveData(const std::vector<Provision>& provisions);
+void addProvision(Provision*& provisions, int& count, const Provision& newProvision);
+void loadData(Provision*& provisions, int& count, const std::string& filename);
+void showData(const Provision* provisions, int count);
+void editData(Provision* provisions, int count);
+void performCalculations(const Provision* provisions, int count);
+void saveData(const Provision* provisions, int count);
 
 int main() {
-    // Программа будет здесь
+    setlocale(LC_ALL, "Russian");
+
+    Provision* provisions = nullptr; // указатель на динамический массив
+    int provisionCount = 0; // счетчик элементов в массиве
+
+    loadData(provisions, provisionCount, "provisions.txt");
+
+    int choice = 0;
+    while (choice != 6) {
+        // ... здесь будет меню ...
+    }
+
+    delete[] provisions;
     return 0;
 }
+
+// функция для добавления нового товара в массив
+void addProvision(Provision*& provisions, int& count, const Provision& newProvision) {
+    int newCount = count + 1;
+    Provision* newArray = new Provision[newCount]; 
+    for (int i = 0; i < count; ++i) { newArray[i] = provisions[i]; }
+    newArray[count] = newProvision; 
+    if (provisions != nullptr) { delete[] provisions; }
+    provisions = newArray; 
+    count = newCount; 
+}
+
+// заглушки для остальных функций
+void loadData(Provision*& provisions, int& count, const std::string& filename) {}
+void showData(const Provision* provisions, int count) {}
+void editData(Provision* provisions, int count) {}
+void performCalculations(const Provision* provisions, int count) {}
+void saveData(const Provision* provisions, int count) {}
